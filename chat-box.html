@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <div class="chat-box" >
+      <md-toolbar class="md-toolbar-tools">
+        <h1 class="title">{{titleIndex}}</h1>
+      </md-toolbar>
+      <div class="chat-messages">
+        <!-- Chat messages will be displayed here -->
+        <div class="message" ng-repeat="message in messages">
+          <h3>{{titleIndex}}</h3>
+          <p>{{message}}</p>
+        </div>
+      </div>
+      
+      <div class="footer">
+        <md-input-container class="md-block">
+          <label style="color:#ddd">Enter Message</label>
+          <input
+            
+            type="text"
+            ng-model="message"
+            ng-keydown="sendMessage($event)"
+          />
+        </md-input-container>
+    </div> 
+      
+      
+    </div>
+  </body>
+</html>

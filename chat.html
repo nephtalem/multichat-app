@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="/node_modules/angular-material/angular-material.css"
+    />
+    <!-- <link rel="stylesheet" href="app.css"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  </head>
+  <body>
+   
+
+    <script>
+      angular
+        .module("chat", ["ngMaterial", "ngMessages"])
+        .controller("myController", function ($scope) {
+          $scope.title = "Chat Box1";
+          $scope.Messages = []
+          $scope.onEnter = function ($event) {
+            if ($event.keyCode === 13) {
+              $scope.Messages.push($scope.userMessage);
+              $scope.userMessage = "";
+              console.log('enter pressed')
+            }
+          };
+        });
+    </script>
+
+    <div ng-app="chat" ng-controller="myController" style="max-width: 400px; border: 1px solid">
+        <md-card>
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Chat box</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-toolbar class="md-toolbar-tools">
+               <h1 >{{title}}</h1>
+            </md-toolbar>
+            <md-card-content>
+              <ul >
+                  <li ng-repeat="message in Messages">{{message}}</li>
+              </ul>
+            </md-card-content>
+         
+            <md-toolbar class="md-toolbar-tools" style="padding:0 35px; overflow: hidden; ">
+               
+            <md-input-container   style=" height:40px "  >
+              <label>Enter Message</label>
+              <input type="text" ng-model="userMessage" ng-focus="onEnter($event)"/>
+            </md-input-container>
+            </md-toolbar>
+          </md-card>
+    </div>
+
+    <!-- <script src="/node_modules/angular/angular.js"></script> -->
+    <script src="/node_modules/angular-aria/angular-aria.js"></script>
+    <script src="/node_modules/angular-animate/angular-animate.js"></script>
+    <script src="/node_modules/angular-messages/angular-messages.js"></script>
+    <script src="/node_modules/angular-material/angular-material.js"></script>
+  </body>
+</html>

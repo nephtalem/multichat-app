@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="/node_modules/angular-material/angular-material.css"
+    />
+    <link rel="stylesheet" href="app.css" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  </head>
+  <body>
+    <script>
+      // Include app dependency on ngMaterial
+
+      var app = angular.module("myApp", ["ngMaterial", "ngMessages"]);
+
+      app.controller("myController", function ($scope, $rootScope) {
+        $scope.chatBoxes = [];
+        $scope.message=''
+        console.log($scope.message)
+        $scope.addChatBox = function () {
+          var chatBox = {
+            messages: [],
+            sendMessage: function (event) {
+             
+              if (!event || event.keyCode === 13) {
+              
+                if ($scope.message) {
+                  console.log('hi')
+                  $scope.messages.push($scope.message);
+                  $scope.message = "";
+                  console.log('hi')
+                  $rootScope.$broadcast("chatMessage", $scope.messages);
+                }
+              }
+            },
+          };
+
+          if($scope.chatBoxes.length > 9){
+            alert('you can not add more than 10 chat boxes')
+          }
+         else{
+
+           $scope.chatBoxes.push(chatBox);
+         }
+
+     
+          // console.log(chatBox);
+        };
+
+        $rootScope.$on("chatMessage", function (event, messages) {
+          $scope.chatBoxes.forEach(function (chatBox) {
+            if (chatBox.messages !== messages) {
+              chatBox.messages = messages;
+            }
+          });
+        });
+      });
+
+      app.directive("chatBox", function ($timeout) {
+        return {
+          restrict: "E",
+          scope: {
+            title: "@",
+            index: "@",
+            messages: "=",
+            sendMessage: "&",
+          },
+          templateUrl: "chat-box.html",
+
+          controller: function ($scope) {
+            $scope.messages = [];
+            $scope.titleIndex = $scope.title + " " + $scope.index;
+
+            $scope.sendMessage = function ($event) {
+              if (!event || $event.keyCode === 13) {
+                if ($scope.message) {
+                  $scope.messages.push($scope.message);
+                  $scope.message = "";
+                }
+              }
+            };
+          },
+
+          // link: function (scope, element, attrs) {
+          //   scope.$watch(
+          //     "messages",
+          //     function (newVal, oldVal) {
+          //       $timeout(function () {
+          //         var chatMessages = element.find(".chat-messages");
+          //         if (chatMessages.length) {
+          //           chatMessages.scrollTop(chatMessages[0].scrollHeight);
+          //         }
+          //       });
+          //     },
+          //     true
+          //   );
+          // },
+        };
+      });
+    </script>
+
+    <div ng-app="myApp" ng-controller="myController">
+      <md-toolbar class="md-toolbar-tools">
+        <h1 class="title">Multichat</h1>
+      </md-toolbar>
+
+      <md-content class="md-padding container" layout="column">
+        <div flex layout="row" layout-align="center center">
+          <md-button class="md-raised md-primary" ng-click="addChatBox()"
+            >Add chat box</md-button>
+        </div>
+
+        <div flex  class="chatbox">
+          <div ng-repeat="chatBox in chatBoxes" flex >
+            <chat-box
+              title="Chat Box"
+              index="{{$index+1}}"
+              messages="chatBox.messages"
+              send-message="chatBox.sendMessage($event)"
+            ></chat-box>
+          </div>
+        </div>
+      </md-content>
+    </div>
+
+    <script src="/node_modules/angular/angular.js"></script>
+    <script src="/node_modules/angular-aria/angular-aria.js"></script>
+    <script src="/node_modules/angular-animate/angular-animate.js"></script>
+    <script src="/node_modules/angular-messages/angular-messages.js"></script>
+    <script src="/node_modules/angular-material/angular-material.js"></script>
+  </body>
+</html>
